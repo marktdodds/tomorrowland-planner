@@ -1,5 +1,12 @@
 import { useCallback } from 'react'
-import { DAY_ORDER, STORAGE_KEYS } from './constants'
+import {
+  DAY_ORDER,
+  FESTIVAL_DATA_URLS,
+  getWeekendStorageKey,
+  STORAGE_KEYS,
+  WEEKEND_LABELS,
+  type FestivalWeekend,
+} from './constants'
 import { useFestivalData } from './hooks/useFestivalData'
 import { useLocalStorageState, useSetLocalStorage } from './hooks/useLocalStorage'
 import { useSharePlanImport } from './hooks/useSharePlanImport'
@@ -19,6 +26,7 @@ import { ConflictPanel, MyPlan } from './components/PlanPanels'
 import { ScheduleGrid } from './components/ScheduleGrid'
 import { ScheduleViewToggles } from './components/ScheduleViewToggles'
 import { EmptyState, ErrorState, LoadingState } from './components/StatePanels'
+import { WeekendSwitcher } from './components/WeekendSwitcher'
 
 interface ArtistFilterState {
   query: string
@@ -26,28 +34,33 @@ interface ArtistFilterState {
 }
 
 export default function App() {
-  const { performances, loading, error, refetch } = useFestivalData()
+  const [weekend, setWeekend] = useLocalStorageState<FestivalWeekend>(
+    STORAGE_KEYS.selectedWeekend,
+    'W2',
+  )
+
+  const { performances, loading, error, refetch } = useFestivalData(FESTIVAL_DATA_URLS[weekend])
   const { selected: selectedIds, toggle, clear: clearPlan, setSelected } = useSetLocalStorage(
-    STORAGE_KEYS.selectedPerformances,
+    getWeekendStorageKey(weekend, 'selectedPerformances'),
   )
 
   const [artistFilter, setArtistFilter] = useLocalStorageState<ArtistFilterState>(
-    STORAGE_KEYS.artistFilter,
+    getWeekendStorageKey(weekend, 'artistFilter'),
     { query: '', selectedArtistIds: [] },
   )
 
   const [activeDay, setActiveDay] = useLocalStorageState<(typeof DAY_ORDER)[number]>(
-    STORAGE_KEYS.activeDay,
+    getWeekendStorageKey(weekend, 'activeDay'),
     'FRIDAY',
   )
 
   const [scheduleView, setScheduleView] = useLocalStorageState<ScheduleViewOptions>(
-    STORAGE_KEYS.scheduleView,
+    getWeekendStorageKey(weekend, 'scheduleView'),
     { expandStages: false, fullLineup: false },
   )
 
   const [vitaminSchedule, setVitaminSchedule] = useLocalStorageState<VitaminScheduleState>(
-    STORAGE_KEYS.vitaminSchedule,
+    getWeekendStorageKey(weekend, 'vitaminSchedule'),
     createEmptyVitaminSchedule(),
   )
 
@@ -110,7 +123,8 @@ export default function App() {
       <header className="hero">
         <div className="hero-glow" aria-hidden="true" />
         <div className="hero-content">
-          <p className="eyebrow">Tomorrowland Belgium · Weekend 2</p>
+          <WeekendSwitcher activeWeekend={weekend} onChange={setWeekend} />
+          <p className="eyebrow">Tomorrowland Belgium · {WEEKEND_LABELS[weekend]}</p>
           <h1>Build your perfect weekend</h1>
           <p className="hero-copy">
             Filter artists, explore the full stage grid, and curate your personal schedule with

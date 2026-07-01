@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { FESTIVAL_DATA_URL } from '../constants'
 import type { FestivalData, ParsedPerformance } from '../types'
 import { enrichPerformance } from '../utils/performances'
 
@@ -10,7 +9,7 @@ interface UseFestivalDataResult {
   refetch: () => void
 }
 
-export function useFestivalData(): UseFestivalDataResult {
+export function useFestivalData(dataUrl: string): UseFestivalDataResult {
   const [performances, setPerformances] = useState<ParsedPerformance[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -24,7 +23,7 @@ export function useFestivalData(): UseFestivalDataResult {
       setError(null)
 
       try {
-        const response = await fetch(FESTIVAL_DATA_URL)
+        const response = await fetch(dataUrl)
         if (!response.ok) {
           throw new Error(`Failed to load lineup (${response.status})`)
         }
@@ -50,7 +49,7 @@ export function useFestivalData(): UseFestivalDataResult {
     return () => {
       cancelled = true
     }
-  }, [reloadToken])
+  }, [dataUrl, reloadToken])
 
   return {
     performances,
