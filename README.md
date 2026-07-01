@@ -81,3 +81,4 @@ src/
 Selected performances are compared pairwise. A conflict is reported only when two sets overlap by at least one minute — back-to-back sets (one ending at 17:00 and the next starting at 17:00) are not flagged.
 
 Conflicting sets are highlighted with red borders and badges in the grid, listed in the conflict panel, and marked in the personal plan sidebar.
+# tomorrowland-planner
