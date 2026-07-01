@@ -39,6 +39,11 @@ body,
   min-height: 100%;
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -162,6 +167,28 @@ button {
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 16px;
+}
+
+.panel-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.share-import-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-color: rgba(61, 214, 140, 0.35);
+  background: rgba(61, 214, 140, 0.08);
+}
+
+.share-import-banner p {
+  margin: 0;
+  color: var(--text);
 }
 
 .panel-header h2,
@@ -636,6 +663,14 @@ button {
   overflow: visible;
 }
 
+.schedule-scroll-hint {
+  display: none;
+  margin: 0 0 10px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
 .schedule-collapsed-gap {
   position: absolute;
   left: 0;
@@ -870,8 +905,7 @@ button {
 }
 
 @media (max-width: 900px) {
-  .hero-stats,
-  .day-tabs {
+  .hero-stats {
     grid-template-columns: 1fr;
   }
 
@@ -885,6 +919,164 @@ button {
 
   .panel-header {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .schedule-panel {
+    width: auto;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .schedule-grid-wrapper {
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+  }
+
+  .schedule-grid-wrapper.compact {
+    overflow: hidden;
+  }
+
+  .schedule-grid {
+    grid-template-columns: 1fr;
+    min-width: 0;
+  }
+
+  .vitamin-column {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .vitamin-column-body {
+    min-height: auto !important;
+    overflow: visible;
+  }
+
+  .vitamin-sidebar {
+    height: auto;
+    padding: 10px 12px 12px;
+  }
+
+  .vitamin-sidebar-header p {
+    display: none;
+  }
+
+  .vitamin-dose-list {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .vitamin-dose-card {
+    flex: 0 0 auto;
+    min-width: min(210px, 78vw);
+    scroll-snap-align: start;
+  }
+
+  .vitamin-add {
+    margin-top: 8px;
+  }
+
+  .schedule-main {
+    display: grid;
+    grid-template-columns: 48px max-content;
+    min-width: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .time-column {
+    position: sticky;
+    left: 0;
+    z-index: 4;
+    background: rgba(12, 7, 22, 0.98);
+    box-shadow: 6px 0 14px rgba(0, 0, 0, 0.28);
+  }
+
+  .time-axis-label {
+    left: 4px;
+    font-size: 0.68rem;
+  }
+
+  .schedule-column-header-spacer {
+    min-height: 40px;
+  }
+
+  .stage-columns {
+    grid-auto-columns: minmax(132px, 132px);
+    width: max-content;
+  }
+
+  .stage-column-header {
+    padding: 8px 6px;
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+    line-height: 1.25;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+  }
+
+  .performance-block {
+    left: 3px;
+    right: 3px;
+    padding: 6px 7px;
+    border-radius: 8px;
+  }
+
+  .performance-block-name {
+    font-size: 0.78rem;
+    line-height: 1.15;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .performance-block-time,
+  .performance-block-meta {
+    font-size: 0.64rem;
+  }
+
+  .conflict-badge {
+    font-size: 0.58rem;
+    padding: 1px 5px;
+  }
+
+  .conflict-badge.compact {
+    font-size: 0.62rem;
+  }
+
+  .day-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .day-tab {
+    padding: 10px 8px;
+  }
+
+  .day-tab span {
+    font-size: 0.92rem;
+  }
+
+  .schedule-view-toggles {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-scroll-hint {
+    display: block;
   }
 }
 

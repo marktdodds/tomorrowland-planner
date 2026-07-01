@@ -94,6 +94,7 @@ export function ScheduleGrid({
 
   return (
     <div className={`schedule-grid-wrapper ${compact ? 'compact' : ''}`}>
+      <p className="schedule-scroll-hint">Swipe sideways to see more stages</p>
       <div className="schedule-grid">
         <div className="vitamin-column">
           <div className="schedule-column-header-spacer" aria-hidden="true" />

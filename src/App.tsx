@@ -1,6 +1,8 @@
+import { useCallback } from 'react'
 import { DAY_ORDER, STORAGE_KEYS } from './constants'
 import { useFestivalData } from './hooks/useFestivalData'
 import { useLocalStorageState, useSetLocalStorage } from './hooks/useLocalStorage'
+import { useSharePlanImport } from './hooks/useSharePlanImport'
 import type { VitaminScheduleState } from './types'
 import { createEmptyVitaminSchedule } from './utils/vitamin'
 import {
@@ -25,7 +27,7 @@ interface ArtistFilterState {
 
 export default function App() {
   const { performances, loading, error, refetch } = useFestivalData()
-  const { selected: selectedIds, toggle, clear: clearPlan } = useSetLocalStorage(
+  const { selected: selectedIds, toggle, clear: clearPlan, setSelected } = useSetLocalStorage(
     STORAGE_KEYS.selectedPerformances,
   )
 
@@ -48,6 +50,18 @@ export default function App() {
     STORAGE_KEYS.vitaminSchedule,
     createEmptyVitaminSchedule(),
   )
+
+  const handleShareImport = useCallback(
+    (performanceIds: Set<string>, importedVitaminSchedule: VitaminScheduleState) => {
+      setSelected(performanceIds)
+      setVitaminSchedule(importedVitaminSchedule)
+    },
+    [setSelected, setVitaminSchedule],
+  )
+
+  const { imported: sharedPlanImported, dismissImported } = useSharePlanImport({
+    onImport: handleShareImport,
+  })
 
   const selectedArtistIds = new Set(artistFilter.selectedArtistIds)
   const artistOptions = buildArtistOptions(performances)
@@ -126,6 +140,15 @@ export default function App() {
 
         {!loading && !error && (
           <>
+            {sharedPlanImported && (
+              <div className="panel share-import-banner" role="status">
+                <p>Loaded a shared weekend plan — sets and vitamin schedule are ready to view.</p>
+                <button type="button" className="button button-ghost" onClick={dismissImported}>
+                  Dismiss
+                </button>
+              </div>
+            )}
+
             <ArtistFilter
               artists={artistOptions}
               query={artistFilter.query}

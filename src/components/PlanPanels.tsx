@@ -6,6 +6,7 @@ import { getStagesForDay } from '../utils/performances'
 import { hasVitaminSchedule } from '../utils/vitamin'
 import { DayTabs } from './DayTabs'
 import { ScheduleGrid } from './ScheduleGrid'
+import { SharePlanButton } from './SharePlanButton'
 
 interface ConflictPanelProps {
   conflicts: PerformanceConflict[]
@@ -151,11 +152,14 @@ export function MyPlan({
           <h2>My weekend ({selectedPerformances.length})</h2>
           <p>Read-only view of your planned sets and vitamin windows.</p>
         </div>
-        {selectedPerformances.length > 0 && (
-          <button type="button" className="button button-ghost" onClick={onClear}>
-            Clear plan
-          </button>
-        )}
+        <div className="panel-header-actions">
+          <SharePlanButton performanceIds={selectedIds} vitaminSchedule={vitaminSchedule} />
+          {selectedPerformances.length > 0 && (
+            <button type="button" className="button button-ghost" onClick={onClear}>
+              Clear plan
+            </button>
+          )}
+        </div>
       </div>
 
       <DayTabs activeDay={planDay} counts={planDayCounts} onChange={setPlanDay} />
